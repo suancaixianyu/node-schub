@@ -1,0 +1,32 @@
+name: Deploy to Pages
+
+on:
+  push:
+    branches: [main] # 只监听 main 分支
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn # 如果你用 npm，把 yarn 改成 npm
+      - run: yarn # npm ci
+      - run: yarn build # npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist # 打包目录
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment
