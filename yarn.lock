@@ -732,14 +732,7 @@
   resolved "https://registry.npmmirror.com/@tiptap/extensions/-/extensions-3.11.0.tgz#d6f6020312cda743738bbc1e918cd10a7f7d84fc"
   integrity sha512-g43beA73ZMLezez1st9LEwYrRHZ0FLzlsSlOZKk7sdmtHLmuqWHf4oyb0XAHol1HZIdGv104rYaGNgmQXr1ecQ==
 
-"@tiptap/markdown@^3.11.1":
-  version "3.11.1"
-  resolved "https://registry.npmmirror.com/@tiptap/markdown/-/markdown-3.11.1.tgz#2d1e4433f895fb8eefe4325968d4db565f5a1622"
-  integrity sha512-cC3mKV+bBoHJ0Bsd4zstVYFBm8KGsbeAhIayVzY59G4QpvIQC78BgajqXukfUKDLcehiycRYYW/HcOAwvAysWg==
-  dependencies:
-    marked "^15.0.12"
-
-"@tiptap/pm@^2.11.7", "@tiptap/pm@^2.24.0":
+"@tiptap/pm@^2.24.0":
   version "2.24.0"
   resolved "https://registry.npmjs.org/@tiptap/pm/-/pm-2.24.0.tgz#414db0a5ab47d3e2decaa1a7dab6106b84e105a6"
   integrity sha512-rjvy3LmNweyDU/ttqQd+fi4A29KbcqNiQ/oWvzv7JNPS9bh4WmuSeWvlNfivo39hHXe46OQhzRVJrSAvyKp+wQ==
@@ -1881,11 +1874,6 @@ markdown-it@^14.0.0:
     mdurl "^2.0.0"
     punycode.js "^2.3.1"
     uc.micro "^2.1.0"
-
-marked@^15.0.12:
-  version "15.0.12"
-  resolved "https://registry.npmmirror.com/marked/-/marked-15.0.12.tgz#30722c7346e12d0a2d0207ab9b0c4f0102d86c4e"
-  integrity sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==
 
 marked@^17.0.1:
   version "17.0.1"
