@@ -26,7 +26,7 @@ export default defineConfig({
       deleteOriginFile: true, // 删除原文件
     }),
   ],
-  base: './', // 设置基础路径
+  base: '/xianyu-vue/', // 设置基础路径
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
