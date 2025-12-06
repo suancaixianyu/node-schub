@@ -23,7 +23,7 @@ export default defineConfig({
       algorithm: 'gzip',
       ext: '.gz',
       threshold: 1024, // 小于1kb的文件不压缩
-      deleteOriginFile: true, // 删除原文件
+      deleteOriginFile: false, // 删除原文件
     }),
   ],
   base: '/node-schub/', // 设置基础路径
