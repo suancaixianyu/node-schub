@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full gap-x-6 justify-between px-1 h-full">
+  <div class="flex w-full gap-x-6 justify-between px-1">
     <!-- 主页,横向排列 -->
     <!-- <PostPlate /> -->
     <PostList />

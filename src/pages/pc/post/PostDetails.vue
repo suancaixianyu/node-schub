@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="!loading"
-    class="pb-2 h-[calc(100vh-64px-24px)] overflow-y-auto"
-    ref="postContainer">
+  <div v-if="!loading" class="pb-2" ref="postContainer">
     <!-- 导航 -->
     <!-- 面包屑 -->
 
@@ -42,7 +39,7 @@
       <ArticleActions :postData="postData" @updatePost="getPost" />
 
       <!-- 文章主体 -->
-      <div class="tiptap flex-1 w-7/10 p-1">
+      <div class="tiptap flex-1 w-7/10 min-w-xl p-1">
         <div ref="htmlContainer" v-html="postData?.content"></div>
         <div class="border-t border-gray my-8"></div>
 
@@ -61,7 +58,7 @@
       </div>
 
       <!-- 右侧卡片 -->
-      <div class="min-w-2/10 relative">
+      <div class="max-w-xs min-w-60 relative">
         <div class="flex flex-col gap-4 no-scrollbar p-2">
           <Card v-if="postData?.status == 2 || postData?.disabled == 1">
             <div class="text-red-500 text-lg font-bold">

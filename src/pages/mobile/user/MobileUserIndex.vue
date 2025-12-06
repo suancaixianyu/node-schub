@@ -36,7 +36,7 @@ import { ChevronLeft, Home } from 'lucide-vue-next'
 import ScButton from '@/components/common/ScButton.vue'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores/module/user/userStore'
-import ScLogin from '@/components/pc/homeHeader/ScLogin.vue'
+import ScLogin from '@/components/common/ScLogin.vue'
 import { useDeviceStore } from '@/stores/global/deviceStore'
 const { t } = useI18n()
 

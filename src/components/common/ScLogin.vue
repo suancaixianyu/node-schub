@@ -26,22 +26,45 @@
     <Card
       noPg
       :class="{
-        'w-3xl h-[36rem]': deviceStore.device === 2,
-        'h-[100dvh]  w-screen rounded-none ': deviceStore.device === 1,
+        'p-4': deviceStore.device === 2,
+        'h-[100dvh]  w-screen rounded-none z-4': deviceStore.device === 1,
       }">
       <div class="flex h-full justify-center">
-        <div v-if="deviceStore.device == 2" class="flex-1">
+        <!-- 左侧空白 -->
+        <!-- <div v-if="deviceStore.device == 2" class="flex-1">
           <img
             src="/public/85120626_p0_master1200.jpg"
             alt="titleImg"
             class="w-full h-full object-cover rounded-lg" />
-        </div>
+        </div> -->
 
         <div
           :class="{
-            flex: deviceStore.device === 2,
-            '': deviceStore.device === 1,
+            'flex relative': deviceStore.device === 2,
+            ' relative h-[100dvh] flex flex-col justify-center items-center':
+              deviceStore.device === 1,
           }">
+          <!-- 头部 -->
+          <div v-if="deviceStore.device === 1" class="absolute top-12 left-12">
+            <ScButton
+              noPd
+              @click="offModal()"
+              :icon="ChevronLeft"
+              :iconSize="24"
+              class="font-bold text-lg">
+              {{ modalMap[modalType] }}
+            </ScButton>
+          </div>
+          <div v-if="deviceStore.device === 2" class="absolute top-0 right-0">
+            <ScButton
+              noPd
+              @click="offModal()"
+              :icon="X"
+              :iconSize="24"
+              class="font-bold text-lg">
+            </ScButton>
+          </div>
+
           <!-- 登录 -->
           <div
             v-if="modalType === 'login'"
@@ -50,27 +73,12 @@
               'w-[22rem]  px-4': deviceStore.device === 2,
               'w-screen max-w-4xl px-8': deviceStore.device === 1,
             }">
-            <div class="flex justify-between items-end">
-              <ScButton
-                noPd
-                @click="deviceStore.device === 1 ? offModal() : null"
-                :icon="deviceStore.device === 1 ? ChevronLeft : null"
-                :iconSize="24"
-                class="font-bold"
-                :class="{
-                  'text-2xl': deviceStore.device === 2,
-                  'text-lg': deviceStore.device === 1,
-                }">
+            <div
+              v-if="deviceStore.device === 2"
+              class="flex justify-between items-end">
+              <ScButton noPd :iconSize="24" class="font-bold text-2xl">
                 {{ $t('b.deng-lu') }}
               </ScButton>
-              <div class="label">
-                <span> {{ $t('f.huan-mei-you-zhang-hao') }} </span>
-                <span
-                  class="text-active cursor-pointer"
-                  @click="handleModalChange('register')">
-                  {{ $t('f.qu-zhu-ce') }}
-                </span>
-              </div>
             </div>
 
             <form class="flex flex-col" @submit.prevent="handleLogin">
@@ -99,36 +107,47 @@
                     checked
                     v-model="note" />
                 </label>
-                <label
-                  class="label cursor-pointer"
-                  @click="handleModalChange('reset_password')">
-                  <span class="label-text text-active">{{
-                    $t('f.wang-ji-mi-ma')
-                  }}</span>
-                </label>
               </div>
             </form>
 
             <div class="modal-action mt-2">
-              <ScButton
+              <!-- <ScButton
                 v-if="deviceStore.device === 2"
                 Border
                 class="px-4"
                 @click="offModal">
                 {{ $t('b.qu-xiao') }}
-              </ScButton>
+              </ScButton> -->
 
               <ScButton
                 Border
                 activation
-                class="px-4"
-                :class="{
-                  'w-full': deviceStore.device === 1,
-                }"
+                class="px-4 w-full"
                 :loading="buttonLoading"
+                :disabled="
+                  loginForm.account === '' || loginForm.password === ''
+                "
                 @click="handleLogin">
                 {{ $t('b.deng-lu') }}
               </ScButton>
+            </div>
+            <hr class="text-gray/50" />
+            <div class="w-full flex justify-between">
+              <label
+                class="label cursor-pointer"
+                @click="handleModalChange('reset_password')">
+                <span class="label-text text-active">{{
+                  $t('f.wang-ji-mi-ma')
+                }}</span>
+              </label>
+
+              <label
+                class="label cursor-pointer"
+                @click="handleModalChange('register')">
+                <span class="label-text text-active">
+                  {{ $t('f.qu-zhu-ce') }}
+                </span>
+              </label>
             </div>
           </div>
 
@@ -140,27 +159,20 @@
               'w-[22rem]  px-4': deviceStore.device === 2,
               'w-screen max-w-4xl px-8': deviceStore.device === 1,
             }">
-            <div class="flex justify-between items-end">
-              <ScButton
-                noPd
-                @click="deviceStore.device === 1 ? offModal() : null"
-                :icon="deviceStore.device === 1 ? ChevronLeft : null"
-                :iconSize="24"
-                class="font-bold"
-                :class="{
-                  'text-2xl': deviceStore.device === 2,
-                  'text-lg': deviceStore.device === 1,
-                }">
+            <div
+              v-if="deviceStore.device === 2"
+              class="flex justify-between items-end">
+              <ScButton noPd :iconSize="24" class="font-bold text-2xl">
                 {{ $t('b.zhu-ce') }}
               </ScButton>
-              <div class="label">
+              <!-- <div class="label">
                 <span> {{ $t('f.yi-jing-you-zhang-hao') }} </span>
                 <span
                   class="text-active cursor-pointer"
                   @click="handleModalChange('login')">
                   {{ $t('f.fan-hui-deng-lu') }}
                 </span>
-              </div>
+              </div> -->
             </div>
 
             <form class="flex flex-col" @submit.prevent="handleRregister">
@@ -212,27 +224,39 @@
               </div>
             </form>
 
-            <div class="modal-action mt-2">
-              <!-- if there is a button in form, it will close the modal -->
-              <ScButton
-                v-if="deviceStore.device === 2"
-                Border
-                class="px-4"
-                @click="offModal">
-                {{ $t('b.qu-xiao') }}
-              </ScButton>
+            <ScButton
+              Border
+              activation
+              class="px-4 w-full"
+              :loading="buttonLoading"
+              :disabled="
+                registerForm.account === '' ||
+                registerForm.password === '' ||
+                registerForm.email === '' ||
+                registerForm.captcha === ''
+              "
+              @click="handleRregister">
+              {{ $t('b.zhu-ce') }}
+            </ScButton>
 
-              <ScButton
-                Border
-                activation
-                class="px-4"
-                :class="{
-                  'w-full': deviceStore.device === 1,
-                }"
-                :loading="buttonLoading"
-                @click="handleRregister">
-                {{ $t('b.zhu-ce') }}
-              </ScButton>
+            <hr class="text-gray/50" />
+
+            <div class="w-full flex justify-between">
+              <label
+                class="label cursor-pointer"
+                @click="handleModalChange('reset_password')">
+                <span class="label-text text-active">{{
+                  $t('f.wang-ji-mi-ma')
+                }}</span>
+              </label>
+
+              <label
+                class="label cursor-pointer"
+                @click="handleModalChange('login')">
+                <span class="label-text text-active">
+                  {{ $t('f.fan-hui-deng-lu') }}
+                </span>
+              </label>
             </div>
           </div>
 
@@ -244,27 +268,12 @@
               'w-[22rem]  px-4': deviceStore.device === 2,
               'w-screen max-w-4xl px-8': deviceStore.device === 1,
             }">
-            <div class="flex justify-between items-end">
-              <ScButton
-                noPd
-                @click="deviceStore.device === 1 ? offModal() : null"
-                :icon="deviceStore.device === 1 ? ChevronLeft : null"
-                :iconSize="24"
-                class="font-bold"
-                :class="{
-                  'text-2xl': deviceStore.device === 2,
-                  'text-lg': deviceStore.device === 1,
-                }">
+            <div
+              v-if="deviceStore.device === 2"
+              class="flex justify-between items-end">
+              <ScButton noPd :iconSize="24" class="font-bold text-2xl">
                 {{ $t('f.zhong-zhi-mi-ma') }}
               </ScButton>
-              <div class="label">
-                <span> {{ $t('f.xiang-qi-lai-le') }} </span>
-                <span
-                  class="text-active cursor-pointer"
-                  @click="handleModalChange('login')">
-                  {{ $t('f.fan-hui-deng-lu') }}
-                </span>
-              </div>
             </div>
 
             <form class="flex flex-col" @submit.prevent="handleRregister">
@@ -289,12 +298,12 @@
                 <div class="flex gap-2 items-center">
                   <ScInput
                     type="text"
-                    :placeholder="$t('f.qing-shu-ru-yan-zheng-ma')"
+                    :placeholder="$t('f.qing-shu-ru-you-xiang-yan-zheng-ma')"
                     v-model="resetPasswordForm.captcha" />
 
                   <ScButton
                     Border
-                    class="w-44 py-2"
+                    class="w-34"
                     :disabled="isSendCode"
                     @click="getCaptcha(resetPasswordForm.email)"
                     type="button">
@@ -304,27 +313,35 @@
               </div>
             </form>
 
-            <div class="modal-action mt-2">
-              <!-- if there is a button in form, it will close the modal -->
-              <ScButton
-                v-if="deviceStore.device === 2"
-                Border
-                class="px-4"
-                @click="offModal">
-                {{ $t('b.qu-xiao') }}
-              </ScButton>
+            <ScButton
+              Border
+              activation
+              class="px-4 w-full"
+              :loading="buttonLoading"
+              :disabled="
+                resetPasswordForm.email === '' ||
+                resetPasswordForm.password === '' ||
+                resetPasswordForm.captcha === ''
+              "
+              @click="handleReset">
+              {{ $t('f.que-ren-zhong-zhi') }}
+            </ScButton>
 
-              <ScButton
-                Border
-                activation
-                class="px-4"
-                :class="{
-                  'w-full': deviceStore.device === 1,
-                }"
-                :loading="buttonLoading"
-                @click="handleReset">
-                {{ $t('f.que-ren-zhong-zhi') }}
-              </ScButton>
+            <hr class="text-gray/50" />
+            <div class="w-full flex justify-between">
+              <label
+                class="label cursor-pointer"
+                @click="handleModalChange('register')">
+                <span class="label-text text-active"> 返回注册 </span>
+              </label>
+
+              <label
+                class="label cursor-pointer"
+                @click="handleModalChange('login')">
+                <span class="label-text text-active">
+                  {{ $t('f.fan-hui-deng-lu') }}
+                </span>
+              </label>
             </div>
           </div>
         </div>
@@ -341,12 +358,12 @@ import { userApi } from '@/apis'
 import type { Api, UserType } from '@/types'
 import { useUserStore } from '@/stores/module/user/userStore'
 import { useToast } from 'vue-toastification'
-import ScUserCard from './ScUserCard.vue'
+import ScUserCard from '@/components/common/ScUserCard.vue'
 import ScModal from '@/components/common/ScModal.vue'
 import ScInput from '@/components/common/ScInput.vue'
 import { formatLink } from '@/utils/format'
 import { useDeviceStore } from '@/stores/global/deviceStore'
-import { ChevronLeft, CircleUserRound } from 'lucide-vue-next'
+import { ChevronLeft, CircleUserRound, X } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
@@ -399,7 +416,11 @@ const countdown = (duration: number) => {
 
   timer = setInterval(updateText, 1000)
 }
-
+const modalMap: { [key: string]: string } = {
+  login: t('b.deng-lu'),
+  register: t('b.zhu-ce'),
+  reset_password: t('f.zhong-zhi-mi-ma'),
+}
 const modalType = ref('login') // 'login' or 'register' or 'reset_password'
 const handleModalChange = (type: string) => {
   modalType.value = type

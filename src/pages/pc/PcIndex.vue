@@ -1,8 +1,8 @@
 <template>
   <!-- 主窗口 -->
-  <div class="mx-auto max-w-[1600px] pb-4 pm-4">
+  <div class="mx-auto max-w-[1600px]">
     <HomeHeader />
-    <div class="w-full mx-auto px-4 pt-1 overflow-y-auto">
+    <div class="w-full mx-auto px-4 pt-1">
       <!-- 主页PostIndex -->
       <router-view></router-view>
     </div>

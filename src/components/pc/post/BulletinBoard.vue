@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 h-full w-1/5 px-1 pt-1 no-scrollbar">
+  <div class="flex flex-col gap-4 h-full w-1/5 min-w-xs px-1 pt-1 no-scrollbar">
     <Creation />
     <Card class="flex flex-col gap-2">
       <h2 class="card-title px-1.5">{{ $t('d.gong-gao-lan') }}</h2>

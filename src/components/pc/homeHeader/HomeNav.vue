@@ -37,6 +37,7 @@ interface MenuItem {
 interface HomeNavProps {
   menuItems: MenuItem[]
   activeNavName: string
+  isRouterLink?: boolean
   updateNav?: (name: string) => void
   updatePage: (page: number) => void
 }
@@ -86,11 +87,14 @@ const setActive = (index: number) => {
     props.updateNav(props.menuItems[index].pathName)
   }
   props.updatePage(index)
+  if (!props.menuItems[index].pathName) return
+  updateIndicator()
+
+  if (props.isRouterLink === false) return
   router.push({
     name: props.menuItems[index].pathName,
     params: props.menuItems[index].params || {},
   })
-  updateIndicator()
 }
 
 const updateActiveIndex = () => {

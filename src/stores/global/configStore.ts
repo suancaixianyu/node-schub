@@ -11,9 +11,9 @@ export const useConfigStore = defineStore('config', {
     /** 自动登录 */
     autoLogin: false,
     /** 后端接口 */
-    serverAddress: 'http://127.0.0.1:3000/api',
+    serverAddress: 'http://192.168.28.238:3000/api',
     // serverAddress: 'https://api.sccmdb.cn/api',
-    uploadAddress: 'http://localhost:3001/upload',
+    uploadAddress: 'http://192.168.28.238:3001/upload',
     errorImg:
       'https://r2.scbbs.top/2025/1119/de379f1fe269fa74c1e701d7eb2cc78360de7c79cc6d843611ce0f5e7a382003-eb46c1ae-7616-4fb0-bf40-35d55d5b4836.png',
 
@@ -26,6 +26,7 @@ export const useConfigStore = defineStore('config', {
       x: 0,
       y: 0,
     },
+    isDev: false,
   }),
 
   actions: {
@@ -54,8 +55,9 @@ export const useConfigStore = defineStore('config', {
         }
       } else {
         console.log('本地环境，使用默认配置')
-        this.serverAddress = 'http://127.0.0.1:3000/api'
-        this.uploadAddress = 'http://localhost:3001/upload'
+        this.serverAddress = 'http://192.168.28.238:3000/api'
+        this.uploadAddress = 'http://192.168.28.238:3001/upload'
+        this.isDev = true
       }
     },
   },

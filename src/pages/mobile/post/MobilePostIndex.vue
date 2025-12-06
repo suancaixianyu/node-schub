@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute top-0 z-1 bg-white w-full">
+  <div class="absolute top-0 z-40 bg-white w-full">
     <MobileHomeNav />
   </div>
 
