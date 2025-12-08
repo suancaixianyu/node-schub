@@ -34,7 +34,7 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0', // 允许外部访问
-    open: true, // 自动打开浏览器
+    open: false, // 自动打开浏览器
     port: 5173, // 设置端口号
   },
   build: {

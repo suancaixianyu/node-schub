@@ -1,7 +1,7 @@
 <template>
   <div
     ref="containerRef"
-    class="overflow-y-auto overflow-x-hidden w-full h-[100dvh]">
+    class="overflow-y-auto overflow-x-hidden w-[100vw] h-[100dvh]">
     <!-- 内容列表 - 这个区域现在会填充剩余空间 -->
     <!-- 主页MobilePostIndex -->
     <div class="home-content">
