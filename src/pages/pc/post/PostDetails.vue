@@ -1,5 +1,8 @@
 <template>
-  <div v-if="!loading" class="pb-2" ref="postContainer">
+  <div
+    v-if="!loading"
+    class="pb-2 h-[calc(100dvh-4.5rem)] overflow-y-auto"
+    ref="postContainer">
     <!-- 导航 -->
     <!-- 面包屑 -->
 
@@ -204,22 +207,29 @@ const scrollToHash = (hash: string) => {
 
   const id = hash.replace('#', '')
   const element = document.getElementById(id)
-  if (element) {
-    const offset = 80
-    const elementRect = element.getBoundingClientRect()
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-    const offsetPosition = elementRect.top + scrollTop - offset
 
-    window.scrollTo({
+  if (!element) {
+    console.warn(`Element with ID '${id}' not found.`)
+    return
+  }
+
+  const offset = 80
+  const elementRect = element.getBoundingClientRect()
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const offsetPosition = elementRect.top + scrollTop - offset
+
+  console.log(`Scrolling to position: ${offsetPosition}`)
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: 'smooth',
+  })
+
+  if (postContainer.value) {
+    postContainer.value.scrollTo({
       top: offsetPosition,
       behavior: 'smooth',
     })
-    if (postContainer.value) {
-      postContainer.value.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      })
-    }
   }
 }
 
@@ -237,15 +247,11 @@ onMounted(async () => {
     loading.value = false
   }
 
-  console.log('哈希', route.hash)
+  console.log('Initial hash:', route.hash)
 
   if (route.hash) {
     nextTick(() => {
       scrollToHash(route.hash)
-      window.scrollTo({
-        top: 900,
-        behavior: 'smooth',
-      })
     })
   }
 })

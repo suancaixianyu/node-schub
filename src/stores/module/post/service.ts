@@ -233,9 +233,6 @@ export const getPostDetails = async (postId: number, t: any) => {
     .getPostDetail(postId)
     .then(async (response: Api) => {
       const data = response.data.data as Post
-      data.content = lightHtml(
-        formatImageSrcsInHtml(await markedToHtml(data.content))
-      )
       data.createdAt = formatTimeOrAgo(data.createdAt, t)
       data.updatedAt = formatTimeOrAgo(data.updatedAt, t)
       data.commentCount = formatNumber(data.commentCount)
@@ -246,13 +243,16 @@ export const getPostDetails = async (postId: number, t: any) => {
         content: lightHtml(formatImageSrcsInHtml(item.content)),
         createdAt: formatTimeOrAgo(item.createdAt, t),
       }))
-      const tocList = generateTocFromHtml(data.content)
-      postStore.tocList = tocList
+      const toc = generateTocFromHtml(data.content)
+      data.content = lightHtml(
+        formatImageSrcsInHtml(await markedToHtml(toc.html))
+      )
+      postStore.tocList = toc.items
       postStore.postData = data
       postStore.errorPage = false // 重置错误页面标志
       return {
         post: data,
-        toc: tocList,
+        toc: toc.items,
       }
     })
     .catch((error) => {

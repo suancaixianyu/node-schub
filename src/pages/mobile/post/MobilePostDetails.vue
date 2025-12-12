@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4">
+  <div class="px-4 h-[100dvh] overflow-y-auto" ref="postContainer">
     <!-- 导航 -->
     <div class="flex justify-between items-center text-sm h-12">
       <ScButton noPd :icon="ChevronLeft" :icon-size="22" @click="goBack">
@@ -97,10 +97,12 @@
     <!-- 详情 -->
     <div v-if="!errorPage" class="flex flex-col w-full gap-6 pr-1 pt-4">
       <!-- 标题 -->
-      <h3 class="text-lg font-bold">{{ postData?.title }}</h3>
+      <h3 v-if="!loading" class="text-lg font-bold" id="post-top">
+        {{ postData?.title }}
+      </h3>
       <!-- 作者 -->
       <div
-        v-if="postData"
+        v-if="postData && !loading"
         class="flex gap-2 items-center"
         @click="
           $router.push({
@@ -120,6 +122,19 @@
           <ScRole :user="postData.author" size="sm"></ScRole>
         </div>
       </div>
+      <div v-if="loading" id="post-top">
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center gap-4">
+            <div class="skeleton h-7 w-7 shrink-0 rounded-lg"></div>
+            <div class="flex flex-col gap-4">
+              <div class="skeleton h-4 w-20"></div>
+            </div>
+          </div>
+          <div class="skeleton h-6 w-38"></div>
+          <div class="skeleton h-4 w-full"></div>
+          <div class="skeleton h-4 w-64"></div>
+        </div>
+      </div>
 
       <!-- 文章主体 -->
       <div class="tiptap">
@@ -132,21 +147,24 @@
             :postData="postData"
             @updatePost="getPostData" />
           <!-- 前置 -->
-          <Dependencies :postData="postData" />
+          <Dependencies :postData="postData" id="dependencies" />
 
           <!-- 发布版 -->
-          <MobileReleases :postData="postData" />
+          <MobileReleases :postData="postData" id="releases" />
 
           <!-- 评分 -->
           <MobileScore
             v-if="postData && postData.type == 2"
             :postId="postData?.id"
-            class="mb-4" />
+            class="mb-4"
+            id="score-container" />
         </div>
       </div>
 
       <!-- 评论区 -->
-      <MobileCommentArea :postData="postData"></MobileCommentArea>
+      <MobileCommentArea
+        :postData="postData"
+        id="comment-container"></MobileCommentArea>
     </div>
     <!-- 错误页面 -->
     <div v-else class="flex flex-col items-center">
@@ -260,12 +278,14 @@ const tocList = ref<TocItem[]>([]) // 文章目录列表
 const imageModal = ref(false) // 图片查看模态框
 const imgurl = ref('') // 图片查看地址
 const htmlContainer = ref<HTMLElement | null>(null) // HTML内容容器
+const postContainer = ref<HTMLElement | null>(null) // 文章内容容器
 const userStore = useUserStore() // 用户存储
 const errorPage = ref(false) // 错误页面标志
 const reportModal = ref(false) // 举报模态框
 const reportReason = ref('')
 const { t } = useI18n() // 国际化函数
 const toast = useToast()
+const loading = ref(false) // 加载状态
 
 const adminDeletePost = (postId: number, disabled: number) => {
   if (!verifyPermissions([1, 2, 5])) {
@@ -335,7 +355,39 @@ const getPostData = async (id: number) => {
   tocList.value = toc
 }
 
+const scrollToHash = (hash: string) => {
+  console.log('Scrolling to hash:', hash)
+
+  const id = hash.replace('#', '')
+  const element = document.getElementById(id)
+
+  if (!element) {
+    console.warn(`Element with ID '${id}' not found.`)
+    return
+  }
+
+  const offset = 80
+  const elementRect = element.getBoundingClientRect()
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const offsetPosition = elementRect.top + scrollTop - offset
+
+  console.log(`Scrolling to position: ${offsetPosition}`)
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: 'smooth',
+  })
+
+  if (postContainer.value) {
+    postContainer.value.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    })
+  }
+}
+
 onMounted(async () => {
+  loading.value = true
   const postId = route.params.postId
   const details = await getPostDetails(+postId, t)
   if (!details.post) {
@@ -345,10 +397,17 @@ onMounted(async () => {
     postData.value = details.post
     tocList.value = details.toc
   }
+  loading.value = false
 
   nextTick(() => {
     bindImageClickEvents()
   })
+
+  if (route.hash) {
+    nextTick(() => {
+      scrollToHash(route.hash)
+    })
+  }
 })
 
 onUnmounted(() => {
@@ -361,6 +420,17 @@ watch(
   () => route.params,
   async (newParams) => {
     getPostData(+newParams.postId)
+  }
+)
+
+// 监听路由hash变化
+watch(
+  () => route.hash,
+  (newHash) => {
+    console.log('newHash', newHash)
+    if (newHash) {
+      scrollToHash(newHash)
+    }
   }
 )
 

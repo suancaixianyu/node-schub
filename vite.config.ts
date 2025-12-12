@@ -26,7 +26,7 @@ export default defineConfig({
       deleteOriginFile: false, // 删除原文件
     }),
   ],
-  base: '/node-schub/', // 设置基础路径
+  base: './', // 设置基础路径
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
